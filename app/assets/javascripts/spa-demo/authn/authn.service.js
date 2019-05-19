@@ -41,7 +41,7 @@
       return service.user!=null ? service.user.id : null;
     }
     function getCurrentUserImage() {
-      return service.user!=null ? APP_CONFIG.server_url + "/api/images/" + service.user.image_id + "/content?width=67" : null;
+      return service.user!=null && service.user.image_id ? APP_CONFIG.server_url + "/api/images/" + service.user.image_id + "/content?width=67" : null;
     }
     function getCurrentUser() {
       return service.user;
