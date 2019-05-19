@@ -5,8 +5,8 @@
     .module("spa-demo.authn")
     .service("spa-demo.authn.Authn", Authn);
 
-  Authn.$inject = ["$auth","$q"];
-  function Authn($auth, $q) {
+  Authn.$inject = ["$auth","$q", "spa-demo.config.APP_CONFIG"];
+  function Authn($auth, $q, APP_CONFIG) {
     var service = this;
     service.signup = signup;
     service.user = null;
@@ -14,6 +14,7 @@
     service.getCurrentUser = getCurrentUser;
     service.getCurrentUserName = getCurrentUserName;
     service.getCurrentUserId = getCurrentUserId;
+    service.getCurrentUserImage = getCurrentUserImage;
     service.login = login;
     service.logout = logout;
 
@@ -39,6 +40,9 @@
     function getCurrentUserId() {
       return service.user!=null ? service.user.id : null;
     }
+    function getCurrentUserImage() {
+      return service.user!=null ? APP_CONFIG.server_url + "/api/images/" + service.user.image_id + "/content?width=67" : null;
+    }
     function getCurrentUser() {
       return service.user;
     }
@@ -57,11 +61,11 @@
           deferred.resolve(response);
         },
         function(response){
-          var formatted_errors = { errors: { 
-            full_messages: response.errors 
+          var formatted_errors = { errors: {
+            full_messages: response.errors
             }
           };
-          console.log("login failure", response);            
+          console.log("login failure", response);
           deferred.reject(formatted_errors);
         });
 
@@ -79,7 +83,7 @@
         function(response){
           service.user = null;
           console.log("logout failure", response);
-          alert(response.status + ":" + response.statusText);            
+          alert(response.status + ":" + response.statusText);
         });
       return result;
     }
